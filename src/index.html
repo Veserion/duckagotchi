@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+	<title>Tamagotchi</title>
+	<meta charset="UTF-8">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+	<script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+</head>
+
+<body>
+	<div class="wrapper">
+		<div class="wrapper__container">
+			<div class="content">
+				<header class="header">
+					<div class="header__wallet">
+						<div class="header__balance">
+							Balance: <span class="header__balance-sum" id="ton-balance"></span>
+						</div>
+						<div class="header__btn" id="ton-connect"></div>
+					</div>
+					<div class="header__stats">
+						<div class="header__hp">
+							<span class="hp-number" id="hp-number">100</span>
+							<img src="<%=require('./img/images/hp-bar.png')%>" alt="hp-bar">
+						</div>
+						<div class="header__lvl">
+							<span class="lvl-number" id="lvl-number">0</span>
+							<img src="<%=require('./img/images/xp-bar.png')%>" alt="xp-bar">
+						</div>
+					</div>
+				</header>
+				<div class="actions">
+					<button class="liderboard" id="liderboard"></button>
+					<button class="buy" id="buy"></button>
+					<button class="pat" id="pat"></button>
+					<button class="feed" id="feed"></button>
+				</div>
+			</div>
+		</div>
+		<div class="main">
+			<div class="egg">
+				<video width="100%" height="100%" autoplay muted playsInline id="fon">
+					<source src="<%=require('./img/anim/egg-bg.mp4')%>" type="video/mp4">
+				</video>
+			</div>
+			<div class="duck__list" id="duck__list">
+				<div class="duck duck-1" id="duck-1">
+					<video width="100%" height="100%" autoplay muted playsInline id="duck1" class="video-feed">
+						<source src="<%=require('./img/anim/duck-1.mp4')%>" type="video/mp4">
+					</video>
+					<video width="100%" height="100%" autoplay muted playsInline id="duck1-1" class="video-pat">
+						<source src="<%=require('./img/anim/duck-1.1.mp4')%>" type="video/mp4">
+					</video>
+				</div>
+				<div class="duck duck-2" id="duck-2">
+					<video width="100%" height="100%" autoplay muted playsInline id="duck2" class="video-feed">
+						<source src="<%=require('./img/anim/duck-2.mp4')%>" type="video/mp4">
+					</video>
+					<video width="100%" height="100%" autoplay muted playsInline id="duck2-1" class="video-pat">
+						<source src="<%=require('./img/anim/duck-2.1.mp4')%>" type="video/mp4">
+						
+					</video>
+				</div>
+				<div class="duck duck-3" id="duck-3">
+					<video width="100%" height="100%" autoplay muted playsInline id="duck3" class="video-feed">
+						<source src="<%=require('./img/anim/duck-3.mp4')%>" type="video/mp4">
+					</video>
+					<video width="100%" height="100%" autoplay muted playsInline id="duck3-1" class="video-pat">
+						<source src="<%=require('./img/anim/duck-3.1.mp4')%>" type="video/mp4">
+					</video>
+				</div>
+				<div class="duck duck-4" id="duck-4">
+					<video width="100%" height="100%" autoplay muted playsInline id="duck4" class="video-feed">
+						<source src="<%=require('./img/anim/duck-4.mp4')%>" type="video/mp4">
+					</video>
+					<video width="100%" height="100%" autoplay muted playsInline id="duck4-1" class="video-pat">
+						<source src="<%=require('./img/anim/duck-3.1.mp4')%>" type="video/mp4">
+					</video>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
