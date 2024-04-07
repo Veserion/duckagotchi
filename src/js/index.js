@@ -1,6 +1,6 @@
 import '../css/index.css'
 
-import {fromNano, TonClient} from "ton";
+import {fromNano, toNano, TonClient} from "ton";
 import TonConnect from "@tonconnect/sdk";
 import TonWeb from "tonweb";
 
@@ -113,10 +113,21 @@ tonConnectUI.onStatusChange(info => {
   else document.getElementById('ton-balance').textContent = ''
 })
 
-// const tonweb = new TonWeb();
-// const walletAddress = connector.account.address
-// const jettonWallet = new TonWeb.token.jetton.JettonWallet(tonweb.provider,{address: walletAddress});
-
 document.getElementById('buy').addEventListener('click', async () => {
-  const data = await jettonWallet.getData();
+  console.log('toNano(0.1)', toNano(0.1))
+  return await tonConnectUI.sendTransaction({messages: [
+      {
+        address: 'UQDmoiT9wo3Lp-Jueht9jd_XA0sA63RtTcY1JBA2-LAOO4cA',
+        amount: 10000000
+      }
+    ]})
+});
+
+document.getElementById('feed').addEventListener('click', async () => {
+  await tonConnectUI.sendTransaction({messages: [
+      {
+        address: 'UQDmoiT9wo3Lp-Jueht9jd_XA0sA63RtTcY1JBA2-LAOO4cA',
+        amount: 1000000
+      }
+    ]})
 });
