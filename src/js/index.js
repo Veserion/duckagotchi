@@ -114,20 +114,19 @@ tonConnectUI.onStatusChange(info => {
 })
 
 document.getElementById('buy').addEventListener('click', async () => {
-  console.log('toNano(0.1)', toNano(0.1))
   return await tonConnectUI.sendTransaction({messages: [
       {
-        address: 'UQDmoiT9wo3Lp-Jueht9jd_XA0sA63RtTcY1JBA2-LAOO4cA',
-        amount: 10000000
+        address: '0:e6a224fdc28dcba7e26e7a1b7d8ddfd7034b00eb746d4dc635241036f8b00e3b',
+        amount: '100000000'
       }
     ]})
 });
 
 document.getElementById('feed').addEventListener('click', async () => {
-  await tonConnectUI.sendTransaction({messages: [
+  return await tonConnectUI.sendTransaction({messages: [
       {
-        address: 'UQDmoiT9wo3Lp-Jueht9jd_XA0sA63RtTcY1JBA2-LAOO4cA',
-        amount: 1000000
+        address: '0:e6a224fdc28dcba7e26e7a1b7d8ddfd7034b00eb746d4dc635241036f8b00e3b',
+        amount: '10000000'
       }
     ]})
 });
