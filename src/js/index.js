@@ -1,7 +1,7 @@
 import '../css/index.css'
 
 import {fromNano, TonClient} from "ton";
-import {TonConnectUI} from '@tonconnect/ui'
+import {TonConnect, TonConnectUI} from '@tonconnect/ui'
 
 // const tonConnectUI = new TonConnectUI({
 //   manifestUrl: 'https://nikishmyaps.github.io/tamagotchi/tonconnect-manifest.json',
@@ -9,7 +9,7 @@ import {TonConnectUI} from '@tonconnect/ui'
 // });
 
 const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-  manifestUrl: 'https://nikishmyaps.github.io/tamagotchi/tonconnect-manifest.json',
+  manifestUrl: 'https://veserion.github.io/duckagotchi/tonconnect-manifest.json',
   buttonRootId: 'ton-connect'
 });
 
@@ -170,8 +170,9 @@ document.getElementById('buy').addEventListener('click', async () => {
   console.log('res', res)
 });
 
+const connector = new TonConnect();
 document.getElementById('feed').addEventListener('click', async () => {
-  return await tonConnectUI.sendTransaction({messages: [
+  return await connector.sendTransaction({messages: [
       {
         address: '0:e6a224fdc28dcba7e26e7a1b7d8ddfd7034b00eb746d4dc635241036f8b00e3b',
         amount: '10000000'
