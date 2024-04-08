@@ -172,7 +172,7 @@ document.getElementById('buy').addEventListener('click', async () => {
 
 const connector = new TonConnect();
 document.getElementById('feed').addEventListener('click', async () => {
-  return await connector.sendTransaction({messages: [
+  return await tonConnectUI.sendTransaction({messages: [
       {
         address: '0:e6a224fdc28dcba7e26e7a1b7d8ddfd7034b00eb746d4dc635241036f8b00e3b',
         amount: '10000000'
