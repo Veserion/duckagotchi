@@ -1,7 +1,9 @@
 import '../css/index.css'
 
 import {fromNano, TonClient} from "ton";
-import {TonConnect, TonConnectUI} from '@tonconnect/ui'
+import {Address} from "tonweb/src/utils";
+import {TonConnectUI} from "@tonconnect/ui";
+import axios from "axios";
 
 // const tonConnectUI = new TonConnectUI({
 //   manifestUrl: 'https://nikishmyaps.github.io/tamagotchi/tonconnect-manifest.json',
@@ -10,15 +12,26 @@ import {TonConnect, TonConnectUI} from '@tonconnect/ui'
 
 const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
   manifestUrl: 'https://veserion.github.io/duckagotchi/tonconnect-manifest.json',
-  buttonRootId: 'ton-connect'
+  buttonRootId: 'ton-connect',
+  workchain: 0
 });
 
-const getStats = async () => {
+const getStats = () => {
   const address = localStorage.getItem('walletAddress')
   if(address) {
-    const data = await fetch(`http://44.223.23.181:5000/getStatus/${address}`)
-    const {lvl, hp} = JSON.parse(data)
-
+    // const {data} = await axios.get(`http://44.223.23.181:5000/getStatus/${address}`, {
+    //   headers: {
+    //     'Access-Control-Allow-Origin' : '*',
+    //     'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+    //   }
+    // })
+    // const {lvl, hp} = data
+    let lvl = localStorage.getItem('lvl')
+    let hp = localStorage.getItem('hp')
+    if (!lvl || !hp) {
+      lvl = 0
+      hp = 100
+    }
     const numberLvl = document.getElementById('lvl-number');
     numberLvl.textContent = lvl;
     const numberHp = document.getElementById('hp-number');
@@ -26,7 +39,7 @@ const getStats = async () => {
   }
 }
 
-await getStats()
+getStats()
 const putStats = async () => {
   const address = localStorage.getItem('walletAddress')
   if(address) {
@@ -34,19 +47,9 @@ const putStats = async () => {
     const lvl = parseInt(numberLvl.textContent);
     const numberHp = document.getElementById('hp-number');
     let hp = parseInt(numberHp.textContent);
-    const response = await fetch(`http://44.223.23.181:5000/getStatus/${address}`, {
-      method: "POST",
-      // mode: "cors", // no-cors, *cors, same-origin
-      // cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-      // credentials: "same-origin", // include, *same-origin, omit
-      headers: {
-        "Content-Type": "application/json",
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      // redirect: "follow", // manual, *follow, error
-      // referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-      body: JSON.stringify({id: address, lvl, hp}), // body data type must match "Content-Type" header
-    });
+    // const response = await axios.post(`http://44.223.23.181:5000/putStatus`, {lvl, hp, id: address});
+    localStorage.setItem('lvl', lvl.toString())
+    localStorage.setItem('hp', hp.toString())
   }
 }
 
@@ -105,9 +108,12 @@ const numberHp = document.getElementById('hp-number');
 
 setInterval(async () => {
   let number = parseInt(numberHp.textContent);
-  number -= 2;
-  numberHp.textContent = number;
-  await putStats()
+  if(number > 0) {
+    number -= 1;
+    numberHp.textContent = number;
+    localStorage.setItem('hp', number.toString())
+  }
+  // await putStats()
 }, 30000); // 30 секунд
 
 const numberLvl = document.getElementById('lvl-number');
@@ -116,7 +122,8 @@ setInterval(async () => {
   let number = parseInt(numberLvl.textContent);
   number++;
   numberLvl.textContent = number;
-  await putStats()
+  localStorage.setItem('lvl', number.toString())
+  // await putStats()
 }, 60000); // 60 секунд
 
 const incrementButton2 = document.getElementById('feed');
@@ -128,12 +135,6 @@ incrementButton2.addEventListener('click', () => {
   numberDisplay2.textContent = number2;
 });
 
-//// TON wallet
-
-// const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-//   manifestUrl: 'https://nikishmyaps.github.io/tamagotchi/tonconnect-manifest.json',
-//   buttonRootId: 'ton-connect'
-// });
 
 const client = new TonClient({
   endpoint: 'https://toncenter.com/api/v2/jsonRPC',
@@ -141,6 +142,7 @@ const client = new TonClient({
 
 
 const getWalletBalance = async(walletAddress) => {
+  console.log('walletAddress', walletAddress)
   try {
     const balance = await client.getBalance(walletAddress);
     document.getElementById('ton-balance').textContent = fromNano(balance)
@@ -152,16 +154,18 @@ const getWalletBalance = async(walletAddress) => {
   }
 }
 
-let address = ''
 tonConnectUI.onStatusChange(info => {
   if( info ) {
-    localStorage.setItem('wallerAddress', info.account.address)
+    console.log(new Address(info.account.address).toString(true))
+    localStorage.setItem('walletAddress', new Address(info.account.address).toString(true))
     getWalletBalance(info.account.address)
   }
   else document.getElementById('ton-balance').textContent = ''
 })
 document.getElementById('buy').addEventListener('click', async () => {
-  const res = await tonConnectUI.sendTransaction({messages: [
+  const res = await tonConnectUI.sendTransaction({
+    network: -239,
+    messages: [
       {
         address: '0:e6a224fdc28dcba7e26e7a1b7d8ddfd7034b00eb746d4dc635241036f8b00e3b',
         amount: '100000000'
@@ -170,9 +174,10 @@ document.getElementById('buy').addEventListener('click', async () => {
   console.log('res', res)
 });
 
-const connector = new TonConnect();
 document.getElementById('feed').addEventListener('click', async () => {
-  return await tonConnectUI.sendTransaction({messages: [
+  await tonConnectUI.sendTransaction({
+    network: -239,
+    messages: [
       {
         address: '0:e6a224fdc28dcba7e26e7a1b7d8ddfd7034b00eb746d4dc635241036f8b00e3b',
         amount: '10000000'
